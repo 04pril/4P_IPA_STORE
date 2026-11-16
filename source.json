@@ -1,0 +1,41 @@
+{
+  "name": "4P IPA Store",
+  "identifier": "com.04pril.ipa-store",
+  "sourceURL": "https://raw.githubusercontent.com/04pril/4P_IPA_STORE/refs/heads/main/source.json",
+  "website": "https://github.com/04pril/4P_IPA_STORE",
+  "apps": [
+    {
+      "name": "BitChord",
+      "bundleIdentifier": "com.music.bitchord",
+      "developerName": "04pril",
+      "subtitle": "YouTube Music",
+      "localizedDescription": "04pril/BitChord-iOS 릴리스입니다. 곡을 고르면 전체 플레이어가 열립니다.",
+      "iconURL": "https://raw.githubusercontent.com/04pril/BitChord-iOS/main/.github/assets/icon.png",
+      "versions": [
+        {
+          "version": "1.0.2",
+          "date": "2026-11-16T07:55:00Z",
+          "localizedDescription": "빌드 42. 곡을 고르면 전체 플레이어가 열립니다.",
+          "downloadURL": "https://github.com/04pril/BitChord-iOS/releases/download/v1.0.2-kr-proxy.26/BitChord-1.0.2.ipa",
+          "size": 58309788
+        }
+      ]
+    },
+    {
+      "name": "YouTube Music",
+      "bundleIdentifier": "com.google.ios.youtubemusic",
+      "developerName": "04pril",
+      "subtitle": "WireGuard · Now Playing",
+      "localizedDescription": "04pril/ytmu 릴리스입니다. YouTube Music 9.44.2에 내부 WireGuard와 재생 화면 앱 열기 수정을 넣은 빌드입니다.",
+      "versions": [
+        {
+          "version": "9.44.2",
+          "date": "2026-11-10T08:26:02Z",
+          "localizedDescription": "v0.1. 잠금 화면과 다이나믹 아일랜드에서 앱 열기 증상을 고친 빌드입니다.",
+          "downloadURL": "https://github.com/04pril/ytmu/releases/download/v0.1/YTMUltimate_9.44.2_WireGuard_NowPlaying_v0.1.ipa",
+          "size": 108416304
+        }
+      ]
+    }
+  ]
+}
