@@ -3,6 +3,7 @@
   "identifier": "com.04pril.ipa-store",
   "sourceURL": "https://raw.githubusercontent.com/04pril/4P_IPA_STORE/refs/heads/main/source.json",
   "website": "https://github.com/04pril/4P_IPA_STORE",
+  "iconURL": "https://raw.githubusercontent.com/04pril/4P_IPA_STORE/refs/heads/main/icon.jpg",
   "apps": [
     {
       "name": "BitChord",
@@ -27,6 +28,7 @@
       "developerName": "04pril",
       "subtitle": "WireGuard · Now Playing",
       "localizedDescription": "04pril/ytmu 릴리스입니다. YouTube Music 9.44.2에 내부 WireGuard와 재생 화면 앱 열기 수정을 넣은 빌드입니다.",
+      "iconURL": "https://raw.githubusercontent.com/04pril/4P_IPA_STORE/refs/heads/main/icon.jpg",
       "versions": [
         {
           "version": "9.44.2",
