@@ -14,6 +14,7 @@ https://raw.githubusercontent.com/04pril/4P_IPA_STORE/refs/heads/main/source.jso
 
 `source.json`의 `apps`에 항목을 추가하고, `downloadURL`만 그 릴리스의 IPA 주소로 바꿉니다. 주소는 로그인 없이 열려야 합니다.
 
-- `bundleIdentifier`와 `version`은 IPA 안의 값과 같게 적습니다.
+- `bundleIdentifier`는 IPA 안의 값과 같게 적습니다.
+- `downloadURL`이 특정 파일을 가리키면, version을 비워도 그 파일만 받아집니다. Feather 업데이트 알림은 `version`이 더 큰 값으로 바뀔 때만 나옵니다.
 - `size`는 파일 크기(바이트)입니다.
 - `date`는 `2026-11-16T07:55:00Z`처럼 초까지 있는 UTC입니다.

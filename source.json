@@ -38,6 +38,60 @@
           "size": 108416304
         }
       ]
+    },
+    {
+      "name": "LiveContainer + SideStore",
+      "bundleIdentifier": "com.kdt.livecontainer",
+      "developerName": "LiveContainer",
+      "subtitle": "Nightly",
+      "localizedDescription": "LiveContainer nightly 주소입니다. 파일 이름은 같고 내용만 바뀝니다. Feather 업데이트 알림은 이 목록의 version이 바뀔 때만 나옵니다.",
+      "iconURL": "https://raw.githubusercontent.com/LiveContainer/LiveContainer/main/screenshots/AppIcon1024.png",
+      "downloadURL": "https://github.com/LiveContainer/LiveContainer/releases/download/nightly/LiveContainer+SideStore.ipa"
+    },
+    {
+      "name": "Google Photos",
+      "bundleIdentifier": "com.google.ios.photos",
+      "developerName": "ipavault",
+      "subtitle": "8.1.0",
+      "localizedDescription": "지정된 Google Photos 8.1.0 파일입니다. 이 주소는 그 파일만 가리킵니다.",
+      "iconURL": "https://raw.githubusercontent.com/04pril/4P_IPA_STORE/refs/heads/main/icon.jpg",
+      "downloadURL": "https://fastsign.dev/tg-ipa/ipavault/1358-Google%20Photos%208.1.0%20%28Gunshot%29%20%5B@ipavault%5D.ipa"
+    },
+    {
+      "name": "AdGuard",
+      "bundleIdentifier": "com.adguard.ios.AdGuard",
+      "developerName": "AppTesters",
+      "subtitle": "4.5.25",
+      "localizedDescription": "2026-11-12 릴리스의 AdGuard 4.5.25 파일입니다. 다음 버전은 주소가 달라집니다.",
+      "iconURL": "https://raw.githubusercontent.com/04pril/4P_IPA_STORE/refs/heads/main/icon.jpg",
+      "downloadURL": "https://github.com/apptesters-org/AppTesters_Repo/releases/download/12-11-2026/AdGuard_4.5.25_Subscription_Unlocked_@thisismanpreets_apptesters.org.ipa"
+    },
+    {
+      "name": "YTKACE",
+      "bundleIdentifier": "com.google.ios.youtube",
+      "developerName": "Nightfox",
+      "subtitle": "1.1.8",
+      "localizedDescription": "YTKACE 1.1.8, YouTube 21.46.3 파일입니다. 경로에 버전이 들어 있어 새 빌드로 바뀌지 않습니다.",
+      "iconURL": "https://raw.githubusercontent.com/04pril/4P_IPA_STORE/refs/heads/main/icon.jpg",
+      "downloadURL": "https://nightfox-proxy.kes158.workers.dev/dl/1.1.9/YTKACE_v1.1.8_v21.46.3.ipa"
+    },
+    {
+      "name": "RyukGram",
+      "bundleIdentifier": "com.burbn.instagram",
+      "developerName": "Nightfox",
+      "subtitle": "1.5.1",
+      "localizedDescription": "RyukGram 1.5.1, Instagram 453.0.0 파일입니다. 경로에 버전이 들어 있어 새 빌드로 바뀌지 않습니다.",
+      "iconURL": "https://raw.githubusercontent.com/04pril/4P_IPA_STORE/refs/heads/main/icon.jpg",
+      "downloadURL": "https://nightfox-proxy.kes158.workers.dev/dl/1.1.9/RyukGram_1.5.1_IG453.0.0.ipa"
+    },
+    {
+      "name": "YTMUltimate",
+      "bundleIdentifier": "com.google.ios.youtubemusic",
+      "developerName": "Nightfox",
+      "subtitle": "2.4.1",
+      "localizedDescription": "YTMUltimate 2.4.1, YouTube Music 9.44.2 파일입니다. 위에 있는 YouTube Music 항목과 번들 아이디가 같습니다.",
+      "iconURL": "https://raw.githubusercontent.com/04pril/4P_IPA_STORE/refs/heads/main/icon.jpg",
+      "downloadURL": "https://nightfox-proxy.kes158.workers.dev/dl/1.1.9/YTMUltimate_2.4.1_9.44.2.ipa"
     }
   ]
 }
