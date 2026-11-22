@@ -1,0 +1,54 @@
+name: Zhimei Light Switch - unsigned IPA
+on:
+  push:
+    branches:
+      - build/zhimei-light-switch-20261122
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - name: Check out build branch
+        uses: actions/checkout@v4
+
+      - name: Extract source project
+        run: |
+          set -euo pipefail
+          tar -xJf zhimei-source.tar.xz
+          xcodebuild -version
+          xcodebuild -list -project ZhimeiLightSwitch_Test/LampSwitch.xcodeproj
+
+      - name: Compile for physical iPhone without signing
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project ZhimeiLightSwitch_Test/LampSwitch.xcodeproj \
+            -scheme LampSwitch \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$RUNNER_TEMP/zhimei-build" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            clean build
+
+      - name: Package unsigned IPA
+        run: |
+          set -euo pipefail
+          mkdir -p Payload
+          cp -R "$RUNNER_TEMP/zhimei-build/Build/Products/Release-iphoneos/LampSwitch.app" Payload/LampSwitch.app
+          zip -q -r ZhimeiLightSwitch-Test-unsigned.ipa Payload
+          unzip -t ZhimeiLightSwitch-Test-unsigned.ipa
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZhimeiLightSwitch-Test-unsigned-IPA
+          path: ZhimeiLightSwitch-Test-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 7
