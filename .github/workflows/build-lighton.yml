@@ -1,0 +1,90 @@
+name: Build LightOn unsigned IPA
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'LightOn/**'
+      - '.github/workflows/build-lighton.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'LightOn/**'
+      - '.github/workflows/build-lighton.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lighton-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Check out IPA store
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: |
+          if ! command -v xcodegen >/dev/null; then
+            brew install xcodegen
+          fi
+
+      - name: Check reconstructed HFKJ packet against the working ON capture
+        run: |
+          cd LightOn
+          swiftc LightOn/HFKJProtocol.swift Tests/PacketTest.swift -o "$RUNNER_TEMP/hfkj-test"
+          "$RUNNER_TEMP/hfkj-test"
+
+      - name: Build unsigned iOS app with widget
+        run: |
+          cd LightOn
+          xcodegen generate --spec project.yml
+          xcodebuild \
+            -project LightOn.xcodeproj \
+            -scheme LightOn \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$RUNNER_TEMP/lighton-derived" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+          APP="$RUNNER_TEMP/lighton-derived/Build/Products/Release-iphoneos/LightOn.app"
+          test -f "$APP/LightOn"
+          test -d "$APP/PlugIns/LightOnWidget.appex"
+          mkdir -p "$RUNNER_TEMP/lighton-package/Payload"
+          ditto "$APP" "$RUNNER_TEMP/lighton-package/Payload/LightOn.app"
+          cd "$RUNNER_TEMP/lighton-package"
+          zip -qry "$RUNNER_TEMP/LightOn-v0.1.0-unsigned.ipa" Payload
+          test -s "$RUNNER_TEMP/LightOn-v0.1.0-unsigned.ipa"
+
+      - name: Upload unsigned IPA as Actions artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LightOn-v0.1.0-unsigned
+          path: ${{ runner.temp }}/LightOn-v0.1.0-unsigned.ipa
+          if-no-files-found: error
+
+      - name: Publish GitHub release and update IPA store
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LIGHTON_IPA_PATH: ${{ runner.temp }}/LightOn-v0.1.0-unsigned.ipa
+        run: |
+          if gh release view lighton-v0.1.0 >/dev/null 2>&1; then
+            gh release upload lighton-v0.1.0 "$LIGHTON_IPA_PATH" --clobber
+          else
+            gh release create lighton-v0.1.0 "$LIGHTON_IPA_PATH" \
+              --title 'LightOn v0.1.0' \
+              --notes 'HFKJ BLE 조명 제어, 단일 전원 버튼, 홈 화면 위젯, iOS 단축어 ON/OFF/Toggle. Feather 등에서 서명하여 설치하는 unsigned IPA입니다.'
+          fi
+          python3 LightOn/ci/update_store.py
+          if ! git diff --quiet -- source.json; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add source.json
+            git commit -m 'Add verified LightOn IPA to Feather store'
+            git push
+          fi
