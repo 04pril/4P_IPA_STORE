@@ -53,15 +53,7 @@ replace_once(ctrl,
     '        case .off7: return "과거 08F9 후보 7 (미작동)"\n'+new_names)
 
 new_data=''.join('        case .hfOff'+str(i)+':\n            return ['+ ', '.join(f'"{u}"' for u in seq.split())+']\n' for i,seq in hf.items())
-replace_once(ctrl,
-    '''        case .off7:
-            return ["08F9", "B249", "2CCE", "8BD2", "21DB", "9EBD", "2EAF",
-                    "5387", "1110", "1312", "1514", "1716", "1918"]
-''',
-    '''        case .off7:
-            return ["08F9", "B249", "2CCE", "8BD2", "21DB", "9EBD", "2EAF",
-                    "5387", "1110", "1312", "1514", "1716", "1918"]
-'''+new_data)
+replace_once(ctrl, '        case .off7:\n', new_data + '        case .off7:\n')
 
 new_source_cases=''.join(
     f'''        case "hfOff{i}":
@@ -73,30 +65,27 @@ replace_once(ctrl,
     new_source_cases + '        case "offCycle" where action == .off:\n')
 
 replace_once(ctrl,
-    'OFF 후보 7종 (총 35회)',
+    'OFF 후보 7종 순차 시험 (총 35회)',
     'HFKJ 0xB2 후보 3종 (총 15회)')
 
 new_options=''.join(f'        SourceOption(title: "HFKJ OFF 후보 {i} (0xB2)", value: "hfOff{i}"),\n' for i in hf)
 replace_once(view,
-    '        SourceOption(title: "OFF 후보 7종 순차 시험", value: "offCycle"),\n',
+    '        SourceOption(title: "OFF 7종 순차 시험", value: "offCycle"),\n',
     new_options + '        SourceOption(title: "HFKJ 0xB2 3종 순차", value: "offCycle"),\n')
 
 replace_once(view,
-    'Text("기존 v0.2에서 동작한 ON 경로는 변경하지 않았습니다. 08F9 계열 OFF 후보는 실제 소등 성공 여부를 시험해야 합니다.")',
+    'Text("기존 ON 송신은 유지했습니다. OFF 후보 7종을 각각 또는 연속 시험할 수 있습니다.")',
     'Text("동작 확인된 ON 샘플 A는 유지했습니다. 새 OFF 후보들은 같은 HFKJ 형식이며 내부 제어 코드 0xB2로 디코딩됩니다.")')
 
 replace_once(view,
-    'Text("OFF 패킷 7종 테스트 (ON 유지)")',
+    'Text("OFF 송신 테스트 (7종)").font(.headline)',
     'Text("HFKJ 제어 코드 0xB2 시험 (ON 유지)")')
 replace_once(view,
-    'Text("08F9 계열의 서로 다른 OFF 캡처 7종입니다. 원본 패킷은 매번 달라져서 재전송이 성공한다는 보장은 없습니다.")',
+    'Text("OFF는 매번 데이터가 바뀌므로 고정 패킷 재전송은 미검증입니다.")',
     'Text("기존 08F9 테스트는 실패했습니다. 여기서는 작동한 ON과 같은 HFKJ 형식의 0xB2 패킷 3종만 시험합니다. 실제 OFF 동작은 미검증입니다.")')
 replace_once(view,
-    'Button("OFF 7종 연속 시험 (35회 요청)")',
+    'Button("OFF 후보 7종 순차 송신 (35회 요청)")',
     'Button("HFKJ OFF 3종 순차 시험 (15회 요청)")')
-replace_once(view,
-    'Text("소등에 성공한 번호를 알려주면 그 번호를 OFF 기본값으로 배정할 수 있습니다.")',
-    'Text("성공 시 위의 OFF 샘플 배정에서 같은 번호를 선택하세요. 실패하면 추가 고정 샘플 대신 패킷 생성기 분석이 필요합니다.")')
 
 replace_once(view,
     'Text("기존 ON 송신 유지", systemImage: "antenna.radiowaves.left.and.right")',
