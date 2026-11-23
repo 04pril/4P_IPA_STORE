@@ -45,6 +45,7 @@ final class LampController: NSObject, ObservableObject, CBPeripheralManagerDeleg
     @Published private(set) var isReady = false
     @Published private(set) var isSending = false
     @Published private(set) var lastStateOn: Bool?
+    @Published private(set) var lastDiagnostic = UserDefaults.standard.string(forKey: "lighton.lastDiagnostic") ?? "기록 없음"
 
     private let stateKey = "lighton.lastRequestedPower"
     private let counterKey = "lighton.nextHFKJCounter"
@@ -64,8 +65,16 @@ final class LampController: NSObject, ObservableObject, CBPeripheralManagerDeleg
         manager = CBPeripheralManager(delegate: self, queue: nil)
     }
 
+    private func recordDiagnostic(_ message: String) {
+        let timestamp = DateFormatter.localizedString(from: Date(), dateStyle: .none, timeStyle: .medium)
+        let log = "\(timestamp) · \(message)"
+        lastDiagnostic = log
+        UserDefaults.standard.set(log, forKey: "lighton.lastDiagnostic")
+    }
+
     func showError(_ error: Error) {
         statusText = error.localizedDescription
+        recordDiagnostic("오류: \(error.localizedDescription)")
     }
 
     func setAssumedState(_ on: Bool) {
@@ -102,6 +111,7 @@ final class LampController: NSObject, ObservableObject, CBPeripheralManagerDeleg
         firstAdvertisementAccepted = false
         isSending = true
         statusText = "\(action.label) 신호 준비 중…"
+        recordDiagnostic("\(action.label) 요청 · BLE 상태 \(manager.state.rawValue)")
         defaults.set(Int(counter &+ 1), forKey: counterKey)
 
         if manager.state == .poweredOn { sendNext() }
@@ -140,6 +150,7 @@ final class LampController: NSObject, ObservableObject, CBPeripheralManagerDeleg
             finishAdvertising()
             if wasAccepted, let action {
                 statusText = "BLE 광고 요청 완료 · 실제 조명 응답은 확인할 수 없습니다."
+                recordDiagnostic("광고 5회 완료 (기기 수신 확인 아님)")
                 finishIntent(.success(action))
             } else {
                 let error = LightError.advertisingFailed("BLE 광고가 시작되지 않았습니다.")
@@ -190,6 +201,7 @@ final class LampController: NSObject, ObservableObject, CBPeripheralManagerDeleg
             lastStateOn = on
             UserDefaults.standard.set(on, forKey: stateKey)
             statusText = "\(action.label) 신호 보내는 중…"
+            recordDiagnostic("\(action.label) 광고 시작 콜백 성공")
         }
     }
 
@@ -205,6 +217,7 @@ final class LampController: NSObject, ObservableObject, CBPeripheralManagerDeleg
     private func stopWithError(_ message: String, error: LightError) {
         finishAdvertising()
         statusText = message
+        recordDiagnostic("광고 오류: \(message)")
         finishIntent(.failure(error))
     }
 
