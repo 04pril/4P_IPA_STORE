@@ -1,35 +1,33 @@
-# LightOn
+# LightOn v0.2.0 — headless experiment
 
-Minimal iOS 17+ HFKJ BLE advertising controller, based on the tested ZhimeiLightSwitch v0.6.
+- Bundle ID: `04prillighton`
+- iOS 17+ / HFKJ BLE service UUID advertising (ON 0xB3, OFF 0xB2).
+- Main screen: large toggle, dedicated ON/OFF controls, scrolling on smaller displays.
+- Interactive Home Screen small widget and Lock Screen circular widget: a single `Button(intent: LightToggleIntent())`.
+- Shortcuts: LightOn 전환, LightOn 켜기, LightOn 끄기. Intents have `openAppWhenRun = false` and use `ForegroundContinuableIntent` in the app target, attempting execution in the app's background process.
+- These actions wait for CoreBluetooth advertising completion or an error/timeout rather than returning immediately.
+- Legacy deep links `lighton://toggle`, `lighton://on`, `lighton://off` remain for fallback, but open the app.
 
-- **App name:** `LightOn`
-- **Main bundle identifier:** `04prillighton` (requested verbatim)
-- **Widget identifier:** `04prillighton.widget`
-- **Main app:** one large ON/OFF toggle. Optional `…` menu corrects last-command state if another controller was used.
-- **Home Screen widget:** one button; tapping launches `lighton://toggle` in the containing app and sends the appropriate command. The widget does not directly use Bluetooth.
-- **Lock Screen circular widget:** also toggles through the containing app.
-- **Shortcuts:** `LightOn 전환`, `LightOn 켜기`, `LightOn 끄기` (App Intents). These activate the app so its BLE advertising sender can operate.
-- **Deep links:** `lighton://toggle`, `lighton://on`, `lighton://off`.
+## Important limitation (read before testing)
 
-## Protocol
+This is an **experiment**, not a guarantee of no-open switching.
+iOS changes BLE advertising behavior when an app is not in the foreground. Service UUIDs may move to the overflow area, which a lamp relying on standard foreground advertising may not recognize. CoreBluetooth accepting an advertising request is NOT an acknowledgement that the lamp received it.
 
-HFKJ commands ON=`0xB3`, OFF=`0xB2`. For each command a changing 8-bit counter is used with the verified HFKJ 16-byte encoder and CRC16-CCITT 0x1021, padded to 26 bytes, and advertised as 13 16-bit service UUIDs five times (roughly 0.35 seconds apart).
+On first installation open LightOn once and grant Bluetooth permission. To test, keep LightOn in the background, toggle from Shortcuts, then from the Home Screen widget. Check that the **physical light** changed. If it fails but foreground works, iOS background BLE restrictions are the likely cause.
 
-The first dynamic `0xB3` packet at counter `0x2E` is **identical** to Sample A, confirmed working in real-world tests. The `0xB2` generation is reconstructed from the successful v0.6 binary.
+Widget and Shortcuts intents share the containing app process on supported OS configurations via `ForegroundContinuableIntent`; the same intent source, controller and protocol are included in the widget for type visibility and extension-side compilation. Intent execution is limited by OS policy.
 
-Run packet regression tests on Linux/macOS (no Xcode needed):
+The actual lamp power is not queried. Toggle uses the last accepted advertising command. An external remote can desync it; use the menu in LightOn to correct assumed state.
+
+## Build
+
+Use GitHub Actions → **Build LightOn unsigned IPA**, or:
 
 ```sh
-swiftc LightOn/HFKJProtocol.swift Tests/PacketTest.swift -o /tmp/lighton-packet-test
-/tmp/lighton-packet-test
+cd LightOn
+swiftc LightOn/HFKJProtocol.swift Tests/PacketTest.swift -o /tmp/hfkj-test && /tmp/hfkj-test
+xcodegen generate --spec project.yml
+xcodebuild -project LightOn.xcodeproj -scheme LightOn -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build
 ```
 
-## Build IPA via GitHub Actions
-
-Run the **Build LightOn unsigned IPA** workflow. It builds on a macOS GitHub runner, packages the containing app **and its WidgetKit extension**, then uploads the unsigned IPA as an Actions artifact. A push to `main` also publishes it as a GitHub release and adds/updates the entry in the Feather/AltStore `source.json`.
-
-Unsigned IPA requires signing on-device using Feather or another supported signing method. The installed signing profile must support app extensions; some sideloading providers do not support widgets. Launch the app once and grant Bluetooth permission before using the widget or Shortcuts.
-
-## Important limitation
-
-This lighting protocol advertises commands but does **not** provide reliable physical ON/OFF feedback. Toggle refers to the **last advertising command accepted by iOS**, not a confirmed physical lamp status. An external remote, another phone, or unsuccessful RF reception can desynchronize it. Use the app's `…` menu to correct the assumed state. Direct background BLE from a widget is not implemented because iOS does not guarantee a widget extension enough Bluetooth advertising execution time. The widget opens the app to perform the operation.
+A successful main branch build publishes `LightOn-v0.2.0-unsigned.ipa` as a GitHub Release and updates the Feather source. Sign in Feather; extension signing support is required for widgets.

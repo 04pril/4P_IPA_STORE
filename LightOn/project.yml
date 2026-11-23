@@ -21,8 +21,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: '04prillighton'
         PRODUCT_NAME: LightOn
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        MARKETING_VERSION: '0.1.0'
-        CURRENT_PROJECT_VERSION: '1'
+        MARKETING_VERSION: '0.2.0'
+        CURRENT_PROJECT_VERSION: '2'
     info:
       path: LightOn/Info.plist
       properties:
@@ -31,6 +31,9 @@ targets:
           - CFBundleURLName: lighton-actions
             CFBundleURLSchemes: [lighton]
         NSBluetoothAlwaysUsageDescription: LightOn uses Bluetooth advertising to send on/off commands to your light.
+        # Enable the peripheral background execution mode for the headless
+        # widget/Shortcuts experiment. iOS still moves service UUIDs to overflow.
+        UIBackgroundModes: [bluetooth-peripheral]
         LSRequiresIPhoneOS: true
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
     dependencies:
@@ -42,14 +45,20 @@ targets:
     platform: iOS
     sources:
       - path: LightOnWidget
+      # Shared App Intents must be present in BOTH targets so the widget
+      # button can reference them; the app-process conformance above handles
+      # execution routing when WidgetKit invokes the intent.
+      - path: LightOn/LightOnIntents.swift
+      - path: LightOn/LampController.swift
+      - path: LightOn/HFKJProtocol.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: '04prillighton.widget'
         PRODUCT_NAME: LightOnWidget
         APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
-        MARKETING_VERSION: '0.1.0'
-        CURRENT_PROJECT_VERSION: '1'
+        MARKETING_VERSION: '0.2.0'
+        CURRENT_PROJECT_VERSION: '2'
     info:
       path: LightOnWidget/Info.plist
       properties:

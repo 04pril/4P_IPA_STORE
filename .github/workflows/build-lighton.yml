@@ -57,28 +57,28 @@ jobs:
           mkdir -p "$RUNNER_TEMP/lighton-package/Payload"
           ditto "$APP" "$RUNNER_TEMP/lighton-package/Payload/LightOn.app"
           cd "$RUNNER_TEMP/lighton-package"
-          zip -qry "$RUNNER_TEMP/LightOn-v0.1.0-unsigned.ipa" Payload
-          test -s "$RUNNER_TEMP/LightOn-v0.1.0-unsigned.ipa"
+          zip -qry "$RUNNER_TEMP/LightOn-v0.2.0-unsigned.ipa" Payload
+          test -s "$RUNNER_TEMP/LightOn-v0.2.0-unsigned.ipa"
 
       - name: Upload unsigned IPA as Actions artifact
         uses: actions/upload-artifact@v4
         with:
-          name: LightOn-v0.1.0-unsigned
-          path: ${{ runner.temp }}/LightOn-v0.1.0-unsigned.ipa
+          name: LightOn-v0.2.0-unsigned
+          path: ${{ runner.temp }}/LightOn-v0.2.0-unsigned.ipa
           if-no-files-found: error
 
       - name: Publish GitHub release and update IPA store
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
-          LIGHTON_IPA_PATH: ${{ runner.temp }}/LightOn-v0.1.0-unsigned.ipa
+          LIGHTON_IPA_PATH: ${{ runner.temp }}/LightOn-v0.2.0-unsigned.ipa
         run: |
-          if gh release view lighton-v0.1.0 >/dev/null 2>&1; then
-            gh release upload lighton-v0.1.0 "$LIGHTON_IPA_PATH" --clobber
+          if gh release view lighton-v0.2.0 >/dev/null 2>&1; then
+            gh release upload lighton-v0.2.0 "$LIGHTON_IPA_PATH" --clobber
           else
-            gh release create lighton-v0.1.0 "$LIGHTON_IPA_PATH" \
-              --title 'LightOn v0.1.0' \
-              --notes 'HFKJ BLE 조명 제어, 단일 전원 버튼, 홈 화면 위젯, iOS 단축어 ON/OFF/Toggle. Feather 등에서 서명하여 설치하는 unsigned IPA입니다.'
+            gh release create lighton-v0.2.0 "$LIGHTON_IPA_PATH" \
+              --title 'LightOn v0.2.0' \
+              --notes 'HFKJ BLE 조명 제어, UI 잘림 수정, 개별 ON/OFF, 인터랙티브 위젯과 단축어 무오픈 실행 실험. Feather 등에서 서명하여 설치하는 unsigned IPA입니다.'
           fi
           python3 LightOn/ci/update_store.py
           if ! git diff --quiet -- source.json; then

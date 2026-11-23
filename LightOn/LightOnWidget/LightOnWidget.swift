@@ -1,5 +1,6 @@
 import SwiftUI
 import WidgetKit
+import AppIntents
 
 private struct PowerEntry: TimelineEntry {
     let date: Date
@@ -20,36 +21,41 @@ private struct PowerWidgetView: View {
     private let accent = Color(red: 1.0, green: 0.77, blue: 0.30)
 
     var body: some View {
-        Group {
-            if family == .accessoryCircular {
-                Image(systemName: "power")
-                    .font(.system(size: 30, weight: .medium))
-                    .widgetAccentable()
-            } else {
-                VStack(spacing: 12) {
-                    HStack {
-                        Text("LightOn")
-                            .font(.system(size: 17, weight: .bold, design: .rounded))
-                        Spacer()
-                        Image(systemName: "bolt.fill")
-                            .foregroundStyle(accent)
-                    }
-                    Spacer(minLength: 0)
+        Button(intent: LightToggleIntent()) {
+            Group {
+                if family == .accessoryCircular {
                     Image(systemName: "power")
-                        .font(.system(size: 50, weight: .medium))
-                        .foregroundStyle(accent)
-                    Spacer(minLength: 0)
-                    Text("전원 전환")
-                        .font(.footnote.weight(.medium))
-                        .foregroundStyle(.secondary)
+                        .font(.system(size: 30, weight: .medium))
+                        .widgetAccentable()
+                } else {
+                    VStack(spacing: 10) {
+                        HStack {
+                            Text("LightOn")
+                                .font(.system(size: 17, weight: .bold, design: .rounded))
+                            Spacer()
+                            Image(systemName: "bolt.fill")
+                                .foregroundStyle(accent)
+                        }
+                        Spacer(minLength: 0)
+                        Image(systemName: "power")
+                            .font(.system(size: 49, weight: .medium))
+                            .foregroundStyle(accent)
+                        Spacer(minLength: 0)
+                        Text("전원 전환")
+                            .font(.footnote.weight(.medium))
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(5)
                 }
-                .padding(5)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .contentShape(Rectangle())
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .containerBackground(for: .widget) { Color(uiColor: .secondarySystemGroupedBackground) }
-        .widgetURL(URL(string: "lighton://toggle"))
-        .accessibilityLabel("LightOn 전원 전환. 누르면 앱을 열고 조명 신호를 보냅니다.")
+        .buttonStyle(.plain)
+        .containerBackground(for: .widget) {
+            Color(uiColor: .secondarySystemGroupedBackground)
+        }
+        .accessibilityLabel("LightOn 전원 전환. 앱 화면을 열지 않고 신호 전송을 시도합니다.")
     }
 }
 
@@ -60,7 +66,7 @@ struct LightOnWidget: Widget {
             PowerWidgetView()
         }
         .configurationDisplayName("LightOn 전원")
-        .description("하나의 버튼으로 조명 전원을 켜고 끕니다. 조명 제어를 위해 LightOn을 엽니다.")
+        .description("통합 전원 버튼입니다. 앱을 열지 않는 BLE 광고는 iOS 환경에 따라 실패할 수 있습니다.")
         .supportedFamilies([.systemSmall, .accessoryCircular])
     }
 }
