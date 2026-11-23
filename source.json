@@ -95,19 +95,19 @@
       "bundleIdentifier": "04prillighton",
       "developerName": "04pril",
       "subtitle": "HFKJ 조명 제어 · 위젯 · 단축어",
-      "localizedDescription": "HFKJ BLE ON/OFF 패킷, 한 버튼 전환, 개별 ON/OFF, 앱 화면 열지 않는 인터랙티브 위젯과 단축어 실험 지원. iOS 백그라운드 BLE 광고 제한으로 실제 조명 동작은 보장되지 않습니다.",
+      "localizedDescription": "HFKJ BLE 제어: 통합 전환 및 개별 ON/OFF, 단축어/위젯 무오픈 실험, iOS 26+ Live Activity 백그라운드 광고 실험. 실제 기기 검증 필요.",
       "iconURL": "https://raw.githubusercontent.com/04pril/4P_IPA_STORE/main/LightOn/LightOn/Assets.xcassets/AppIcon.appiconset/Icon-1024.png",
-      "version": "0.2.0",
-      "versionDate": "2026-11-23T14:34:13Z",
-      "downloadURL": "https://github.com/04pril/4P_IPA_STORE/releases/download/lighton-v0.2.0/LightOn-v0.2.0-unsigned.ipa",
-      "size": 260430,
+      "version": "0.3.0",
+      "versionDate": "2026-11-23T16:37:12Z",
+      "downloadURL": "https://github.com/04pril/4P_IPA_STORE/releases/download/lighton-v0.3.0/LightOn-v0.3.0-unsigned.ipa",
+      "size": 297528,
       "versions": [
         {
-          "version": "0.2.0",
-          "date": "2026-11-23T14:34:13Z",
-          "localizedDescription": "LightOn 0.2 실험 빌드: 작은 화면 UI 개선, 개별 ON/OFF, 무오픈 위젯과 단축어 시도.",
-          "downloadURL": "https://github.com/04pril/4P_IPA_STORE/releases/download/lighton-v0.2.0/LightOn-v0.2.0-unsigned.ipa",
-          "size": 260430
+          "version": "0.3.0",
+          "date": "2026-11-23T16:37:12Z",
+          "localizedDescription": "LightOn v0.3 실험: Live Activity를 켜고 무오픈 위젯과 단축어 BLE 제어 테스트.",
+          "downloadURL": "https://github.com/04pril/4P_IPA_STORE/releases/download/lighton-v0.3.0/LightOn-v0.3.0-unsigned.ipa",
+          "size": 297528
         }
       ]
     }
