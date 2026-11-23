@@ -31,6 +31,9 @@ targets:
           - CFBundleURLName: lighton-actions
             CFBundleURLSchemes: [lighton]
         NSBluetoothAlwaysUsageDescription: LightOn uses Bluetooth advertising to send on/off commands to your light.
+        # Enable the peripheral background execution mode for the headless
+        # widget/Shortcuts experiment. iOS still moves service UUIDs to overflow.
+        UIBackgroundModes: [bluetooth-peripheral]
         LSRequiresIPhoneOS: true
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
     dependencies:
