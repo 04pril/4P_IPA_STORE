@@ -26,6 +26,9 @@ jobs:
       - name: Patch OFF candidates and input diagnostics
         run: python3 scripts/patch-off-v03.py
 
+      - name: Install decoded HFKJ 0xB2 OFF candidates
+        run: python3 scripts/patch-hf-off-v05.py
+
       - name: Compile for physical iPhone without signing
         run: |
           set -euo pipefail
