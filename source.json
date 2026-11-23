@@ -95,19 +95,19 @@
       "bundleIdentifier": "04prillighton",
       "developerName": "04pril",
       "subtitle": "HFKJ 조명 제어 · 위젯 · 단축어",
-      "localizedDescription": "HFKJ BLE 패킷으로 조명을 켜거나 끕니다. 통합 전원 버튼, 홈 화면 위젯, 단축어 켜기/끄기/전환을 지원합니다. Bluetooth 권한이 필요합니다.",
+      "localizedDescription": "HFKJ BLE ON/OFF 패킷, 한 버튼 전환, 개별 ON/OFF, 앱 화면 열지 않는 인터랙티브 위젯과 단축어 실험 지원. iOS 백그라운드 BLE 광고 제한으로 실제 조명 동작은 보장되지 않습니다.",
       "iconURL": "https://raw.githubusercontent.com/04pril/4P_IPA_STORE/main/LightOn/LightOn/Assets.xcassets/AppIcon.appiconset/Icon-1024.png",
-      "version": "0.1.0",
-      "versionDate": "2026-11-23T13:17:49Z",
-      "downloadURL": "https://github.com/04pril/4P_IPA_STORE/releases/download/lighton-v0.1.0/LightOn-v0.1.0-unsigned.ipa",
-      "size": 208289,
+      "version": "0.2.0",
+      "versionDate": "2026-11-23T14:34:13Z",
+      "downloadURL": "https://github.com/04pril/4P_IPA_STORE/releases/download/lighton-v0.2.0/LightOn-v0.2.0-unsigned.ipa",
+      "size": 260430,
       "versions": [
         {
-          "version": "0.1.0",
-          "date": "2026-11-23T13:17:49Z",
-          "localizedDescription": "LightOn 첫 공개 빌드: 통합 전원 버튼, 위젯, 단축어 지원.",
-          "downloadURL": "https://github.com/04pril/4P_IPA_STORE/releases/download/lighton-v0.1.0/LightOn-v0.1.0-unsigned.ipa",
-          "size": 208289
+          "version": "0.2.0",
+          "date": "2026-11-23T14:34:13Z",
+          "localizedDescription": "LightOn 0.2 실험 빌드: 작은 화면 UI 개선, 개별 ON/OFF, 무오픈 위젯과 단축어 시도.",
+          "downloadURL": "https://github.com/04pril/4P_IPA_STORE/releases/download/lighton-v0.2.0/LightOn-v0.2.0-unsigned.ipa",
+          "size": 260430
         }
       ]
     }
