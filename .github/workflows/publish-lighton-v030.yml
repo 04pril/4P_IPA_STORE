@@ -1,0 +1,58 @@
+name: Publish LightOn v0.3.0 from verified IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-lighton-v030.yml'
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: lighton-v030-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out store source
+        uses: actions/checkout@v4
+
+      - name: Download successful macOS-built v0.3 IPA artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/lighton"
+          gh run download 45200972031 \
+            --repo "$GITHUB_REPOSITORY" \
+            --name LightOn-v0.3.0-unsigned \
+            --dir "$RUNNER_TEMP/lighton"
+          test -s "$RUNNER_TEMP/lighton/LightOn-v0.3.0-unsigned.ipa"
+          unzip -l "$RUNNER_TEMP/lighton/LightOn-v0.3.0-unsigned.ipa" \
+            | grep -E 'Payload/LightOn.app/PlugIns/LightOnWidget.appex/' >/dev/null
+
+      - name: Create v0.3.0 release and update Feather source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LIGHTON_IPA_PATH: ${{ runner.temp }}/lighton/LightOn-v0.3.0-unsigned.ipa
+        run: |
+          if gh release view lighton-v0.3.0 >/dev/null 2>&1; then
+            gh release upload lighton-v0.3.0 "$LIGHTON_IPA_PATH" --clobber
+          else
+            gh release create lighton-v0.3.0 "$LIGHTON_IPA_PATH" \
+              --target "$GITHUB_SHA" \
+              --title 'LightOn v0.3.0' \
+              --notes 'iOS 26+ Live Activity assisted background BLE control experiment, interactive widget, Shortcuts and diagnostic status. Physical lamp behavior requires testing. Unsigned IPA: sign before installing.'
+          fi
+          python3 LightOn/ci/update_store.py
+          if ! git diff --quiet -- source.json; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add source.json
+            git commit -m 'Publish LightOn v0.3.0 IPA to Feather source'
+            git push
+          fi
