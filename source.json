@@ -89,6 +89,27 @@
       "localizedDescription": "YTMUltimate 2.4.1, YouTube Music 9.44.2 파일입니다.",
       "iconURL": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/07/d7/d9/07d7d96b-66e4-3e57-5a8c-158204e8fe21/logo_youtube_music_2024_q4_color-0-0-1x_U007emarketing-0-0-0-7-0-0-0-85-220.png/512x512bb.jpg",
       "downloadURL": "https://nightfox-proxy.kes158.workers.dev/dl/1.1.9/YTMUltimate_2.4.1_9.44.2.ipa"
+    },
+    {
+      "name": "LightOn",
+      "bundleIdentifier": "04prillighton",
+      "developerName": "04pril",
+      "subtitle": "HFKJ 조명 제어 · 위젯 · 단축어",
+      "localizedDescription": "HFKJ BLE 패킷으로 조명을 켜거나 끕니다. 통합 전원 버튼, 홈 화면 위젯, 단축어 켜기/끄기/전환을 지원합니다. Bluetooth 권한이 필요합니다.",
+      "iconURL": "https://raw.githubusercontent.com/04pril/4P_IPA_STORE/main/LightOn/LightOn/Assets.xcassets/AppIcon.appiconset/Icon-1024.png",
+      "version": "0.1.0",
+      "versionDate": "2026-11-23T13:17:49Z",
+      "downloadURL": "https://github.com/04pril/4P_IPA_STORE/releases/download/lighton-v0.1.0/LightOn-v0.1.0-unsigned.ipa",
+      "size": 208289,
+      "versions": [
+        {
+          "version": "0.1.0",
+          "date": "2026-11-23T13:17:49Z",
+          "localizedDescription": "LightOn 첫 공개 빌드: 통합 전원 버튼, 위젯, 단축어 지원.",
+          "downloadURL": "https://github.com/04pril/4P_IPA_STORE/releases/download/lighton-v0.1.0/LightOn-v0.1.0-unsigned.ipa",
+          "size": 208289
+        }
+      ]
     }
   ]
 }
