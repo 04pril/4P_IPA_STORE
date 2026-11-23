@@ -93,8 +93,8 @@ replace_once(view,
 ) if False else None
 
 s=proj.read_text()
-assert "MARKETING_VERSION = 0.3.1;" in s
-s=s.replace("MARKETING_VERSION = 0.3.1;", "MARKETING_VERSION = 0.5.0;")
-s=s.replace("CURRENT_PROJECT_VERSION = 4;", "CURRENT_PROJECT_VERSION = 5;")
+assert "MARKETING_VERSION = 0.4.0;" in s
+s=s.replace("MARKETING_VERSION = 0.4.0;", "MARKETING_VERSION = 0.5.0;")
+s=s.replace("CURRENT_PROJECT_VERSION = 5;", "CURRENT_PROJECT_VERSION = 6;")
 proj.write_text(s)
 print("Validated ctrl 0xB3 ON and 0xB2 HFKJ candidates; v0.5 source patched, ON data/sender preserved")
