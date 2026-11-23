@@ -23,6 +23,9 @@ jobs:
           xcodebuild -version
           xcodebuild -list -project ZhimeiLightSwitch_Test/LampSwitch.xcodeproj
 
+      - name: Patch OFF candidates and input diagnostics
+        run: python3 scripts/patch-off-v03.py
+
       - name: Compile for physical iPhone without signing
         run: |
           set -euo pipefail
