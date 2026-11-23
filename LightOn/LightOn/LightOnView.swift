@@ -2,6 +2,8 @@ import SwiftUI
 
 struct LightOnView: View {
     @StateObject private var lamp = LampController.shared
+    @StateObject private var session = LightSessionController.shared
+    @Environment(\.scenePhase) private var scenePhase
     private let accent = Color(red: 1.0, green: 0.77, blue: 0.30)
 
     var body: some View {
@@ -27,6 +29,7 @@ struct LightOnView: View {
                         .buttonStyle(.bordered)
                     }
                     .disabled(lamp.isSending)
+                    if #available(iOS 26.0, *) { liveSessionControl }
                     Spacer(minLength: compact ? 8 : 20)
                     statusFooter
                 }
@@ -36,6 +39,10 @@ struct LightOnView: View {
                 .padding(.vertical, 14)
             }
             .scrollIndicators(.hidden)
+        }
+        .onAppear { session.refresh() }
+        .onChange(of: scenePhase) { phase in
+            if phase == .active { session.refresh() }
         }
         .background(Color(uiColor: .systemBackground).ignoresSafeArea())
     }
@@ -100,6 +107,36 @@ struct LightOnView: View {
         .disabled(lamp.isSending)
         .accessibilityLabel("조명 전원 전환")
         .accessibilityHint("마지막 전송 상태를 기준으로 켜거나 끕니다")
+    }
+
+    private var liveSessionControl: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("무오픈 BLE 실험")
+                        .font(.subheadline.weight(.semibold))
+                    Text("Live Activity로 백그라운드 송신 시도")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer(minLength: 8)
+                Button(session.isActive ? "종료" : "준비") {
+                    if session.isActive { session.stop() }
+                    else { session.start() }
+                }
+                .buttonStyle(.bordered)
+            }
+            Text(session.statusText)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("iOS 26+ 실험 기능. 조명 반응을 보장하지 않습니다.")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
     }
 
     private var statusFooter: some View {

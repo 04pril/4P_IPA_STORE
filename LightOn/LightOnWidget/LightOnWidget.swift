@@ -1,6 +1,7 @@
 import SwiftUI
 import WidgetKit
 import AppIntents
+import ActivityKit
 
 private struct PowerEntry: TimelineEntry {
     let date: Date
@@ -59,7 +60,6 @@ private struct PowerWidgetView: View {
     }
 }
 
-@main
 struct LightOnWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "LightOnPowerWidget", provider: PowerProvider()) { _ in
@@ -68,5 +68,57 @@ struct LightOnWidget: Widget {
         .configurationDisplayName("LightOn 전원")
         .description("통합 전원 버튼입니다. 앱을 열지 않는 BLE 광고는 iOS 환경에 따라 실패할 수 있습니다.")
         .supportedFamilies([.systemSmall, .accessoryCircular])
+    }
+}
+
+
+/// A visible ongoing activity is required for the iOS 26+ CoreBluetooth test.
+/// This is separate from the one-button Home Screen widget.
+struct LightOnLiveActivityWidget: Widget {
+    var body: some WidgetConfiguration {
+        ActivityConfiguration(for: LightSessionAttributes.self) { context in
+            HStack(spacing: 12) {
+                Image(systemName: "lightbulb.fill")
+                    .foregroundStyle(.yellow)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("LightOn · BLE 실험")
+                        .font(.headline)
+                    Text(context.state.status)
+                        .font(.caption)
+                }
+                Spacer()
+                Image(systemName: "antenna.radiowaves.left.and.right")
+            }
+            .padding()
+            .activityBackgroundTint(.black.opacity(0.84))
+            .activitySystemActionForegroundColor(.white)
+        } dynamicIsland: { context in
+            DynamicIsland {
+                DynamicIslandExpandedRegion(.center) {
+                    HStack {
+                        Image(systemName: "lightbulb.fill")
+                            .foregroundStyle(.yellow)
+                        Text(context.state.status)
+                            .font(.subheadline)
+                    }
+                }
+            } compactLeading: {
+                Image(systemName: "lightbulb.fill")
+                    .foregroundStyle(.yellow)
+            } compactTrailing: {
+                Text("BLE")
+            } minimal: {
+                Image(systemName: "lightbulb.fill")
+                    .foregroundStyle(.yellow)
+            }
+        }
+    }
+}
+
+@main
+struct LightOnWidgets: WidgetBundle {
+    var body: some Widget {
+        LightOnWidget()
+        LightOnLiveActivityWidget()
     }
 }
