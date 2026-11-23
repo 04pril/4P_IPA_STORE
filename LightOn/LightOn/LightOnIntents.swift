@@ -1,60 +1,41 @@
 import AppIntents
 
-struct LightOnIntent: AppIntent {
+/// ForegroundContinuableIntent executes the widget action in the containing
+/// app's process without forcing its user interface to appear on iOS 17+.
+/// Deprecated on newer SDKs, but intentionally retained for iOS 17 support.
+/// The system can still refuse background Bluetooth advertising.
+struct LightOnIntent: AppIntent, ForegroundContinuableIntent {
     static var title: LocalizedStringResource = "LightOn 켜기"
-    static var description = IntentDescription("HFKJ BLE 신호로 조명을 켭니다.")
-    static var openAppWhenRun: Bool = true
+    static var description = IntentDescription("앱 화면을 열지 않고 HFKJ BLE 켜기 신호를 시도합니다.")
+    static var openAppWhenRun: Bool = false
 
     @MainActor
     func perform() async throws -> some IntentResult {
-        try LampController.shared.send(.on)
+        _ = try await LampController.shared.sendAndWait(.on)
         return .result()
     }
 }
 
-struct LightOffIntent: AppIntent {
+struct LightOffIntent: AppIntent, ForegroundContinuableIntent {
     static var title: LocalizedStringResource = "LightOn 끄기"
-    static var description = IntentDescription("HFKJ BLE 신호로 조명을 끕니다.")
-    static var openAppWhenRun: Bool = true
+    static var description = IntentDescription("앱 화면을 열지 않고 HFKJ BLE 끄기 신호를 시도합니다.")
+    static var openAppWhenRun: Bool = false
 
     @MainActor
     func perform() async throws -> some IntentResult {
-        try LampController.shared.send(.off)
+        _ = try await LampController.shared.sendAndWait(.off)
         return .result()
     }
 }
 
-struct LightToggleIntent: AppIntent {
+struct LightToggleIntent: AppIntent, ForegroundContinuableIntent {
     static var title: LocalizedStringResource = "LightOn 전환"
-    static var description = IntentDescription("마지막 조명 명령을 기준으로 켜기 또는 끄기를 실행합니다.")
-    static var openAppWhenRun: Bool = true
+    static var description = IntentDescription("마지막 명령 기준으로 앱 화면을 열지 않고 전원 전환을 시도합니다.")
+    static var openAppWhenRun: Bool = false
 
     @MainActor
     func perform() async throws -> some IntentResult {
-        try LampController.shared.send(.toggle)
+        _ = try await LampController.shared.sendAndWait(.toggle)
         return .result()
-    }
-}
-
-struct LightOnShortcuts: AppShortcutsProvider {
-    static var appShortcuts: [AppShortcut] {
-        AppShortcut(
-            intent: LightToggleIntent(),
-            phrases: ["Toggle the light with \(.applicationName)"],
-            shortTitle: "전원 전환",
-            systemImageName: "power"
-        )
-        AppShortcut(
-            intent: LightOnIntent(),
-            phrases: ["Turn on the light with \(.applicationName)"],
-            shortTitle: "조명 켜기",
-            systemImageName: "lightbulb.fill"
-        )
-        AppShortcut(
-            intent: LightOffIntent(),
-            phrases: ["Turn off the light with \(.applicationName)"],
-            shortTitle: "조명 끄기",
-            systemImageName: "lightbulb.slash.fill"
-        )
     }
 }
